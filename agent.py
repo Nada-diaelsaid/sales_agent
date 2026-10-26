@@ -6,13 +6,31 @@ import duckdb
 from pydantic import BaseModel, Field
 from IPython.display import Markdown
 
-from helper import get_openai_api_key
+from helper import get_openai_api_key, get_phoenix_endpoint
 
+import phoenix as px
+import os
+from phoenix.otel import register
+from openinference.instrumentation.openai import OpenAIInstrumentor
+from openinference.semconv.trace import SpanAttributes
+from opentelemetry.trace import Status, StatusCode
+from openinference.instrumentation import TracerProvider
+
+# print(px)
 # initialize the OpenAI client
 openai_api_key = get_openai_api_key()
 client = OpenAI(api_key=openai_api_key)
 
 MODEL = "gpt-4o-mini"
+# print(get_phoenix_endpoint())
+PROJECT_NAME = "tracing-agent"
+
+# Connect OpenTelemetry to Phoenix to be able to visualize traces in the Phoenix dashboard. 
+# The register function will return a TracerProvider that can be used to create spans and add attributes to them.
+# We can access the Phoenix dashboard at the endpoint returned by get_phoenix_endpoint() + "v1/traces"
+tracer_provider = register(
+    project_name=PROJECT_NAME)
+session = px.launch_app()
 
 # Tool 1: Database Lookup
 # define the path to the transactional data
