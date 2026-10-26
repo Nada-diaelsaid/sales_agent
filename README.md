@@ -14,3 +14,7 @@ Traces and spans come from a framework called OpenTelemetry.
 1) It simplifies debugging, rather than throwing print statements all over.
 2) Provides a detailed log of each call made to the app, which is necessary to run/monitor performance evaluation.
 3) Helps you understand and eventually control the unpredictable behaviors of LLMs.
+
+**To run Phoenix server**
+In CLI run: phoenix serve 
+It should run on localhost:6006
