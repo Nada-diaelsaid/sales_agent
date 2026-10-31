@@ -18,6 +18,7 @@ Traces and spans come from a framework called OpenTelemetry.
 **To run Phoenix server**
 In CLI run: phoenix serve 
 It should run on localhost:6006
+Set `PHOENIX_COLLECTOR_ENDPOINT=http://localhost:6006` in `.env`; the tracing setup appends `/v1/traces` and uses HTTP/protobuf.
 
 # Types of AI agents evals
 ## Code based evals

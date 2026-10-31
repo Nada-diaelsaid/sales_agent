@@ -6,7 +6,7 @@ import duckdb
 from pydantic import BaseModel, Field
 from IPython.display import Markdown
 
-from helper import get_openai_api_key, get_phoenix_endpoint
+from helper import get_openai_api_key, get_phoenix_trace_endpoint
 
 import phoenix as px
 import os
@@ -29,7 +29,10 @@ PROJECT_NAME = "tracing-agent"
 # The register function will return a TracerProvider that can be used to create spans and add attributes to them.
 # We can access the Phoenix dashboard at the endpoint returned by get_phoenix_endpoint() + "v1/traces"
 tracer_provider = register(
-    project_name=PROJECT_NAME)
+    project_name=PROJECT_NAME,
+    endpoint=get_phoenix_trace_endpoint(),
+    protocol="http/protobuf",
+)
 session = px.launch_app()
 
 # Tool 1: Database Lookup

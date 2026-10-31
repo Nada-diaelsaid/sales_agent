@@ -15,6 +15,13 @@ def get_openai_api_key():
 def get_phoenix_endpoint():
     load_env()
     phoenix_endpoint = os.getenv("PHOENIX_COLLECTOR_ENDPOINT")
+    print(f"Phoenix endpoint: {phoenix_endpoint}")
     return phoenix_endpoint
 
+
+def get_phoenix_trace_endpoint():
+    phoenix_endpoint = get_phoenix_endpoint()
+    if not phoenix_endpoint:
+        raise RuntimeError("PHOENIX_COLLECTOR_ENDPOINT must be set to export Phoenix traces.")
+    return f"{phoenix_endpoint.rstrip('/')}/v1/traces"
 
