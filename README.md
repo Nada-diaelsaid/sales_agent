@@ -92,3 +92,34 @@ In the sales agent code there are several skills/tools to be evaluated:
 1) Tool #1 Database lookup: evaluate database preparation, generate SQL, execute SQL -> LLM-as-a-judge+ code based evals.
 2) Tool #2 Data analysis: Analysis clarity, entity correctness -> LLM-as-a-judge
 3) Tool #3 Data visualization code gen: code is runnable -> code based evals
+
+## Agent trajectory
+What is agent trajectory?
+A trajectory is simply the path the agent takes through different router, tool, and other logic steps for a given input.
+![alt text](image-5.png)
+
+More complex trajectory example:
+![alt text](image-6.png)
+
+And sometimes it gets more agent when the agent has 10+ tools, and even when in world production the agent contains multiple agents.
+
+So it is important to trace agent's trajectory for performance and to be able to track that agent steps.
+
+So how to do so? **Convergance**
+Convergence is a measurement for how closely your agent follows an optimal path for a given query.
+
+How to test convergance?
+1) Run your agent on a set of similar queries
+Ex: Fetch sales for year 2012, retrieve data from Nov 2022 to Nov 2023 -> N is total number of runs (Agent should take the same path).
+2) Record number of steps taken for each query
+S(agent, i): steps taken by the agent in the i-th run
+3) Find the length of the optimal path taken 
+S(optimal): min[S(agent1), S(agent2), S(agent3) ... S(agentN)]
+4) Then use these numbers to calculate the convergance score:
+![alt text](image-7.png)
+
+Some notes on convergance:
+First is that convergence evaluations will typically not catch situations where your agent takes an unnecessary step every time for every query in your test set. And the reason being here is that the optimal path in a convergence eval is typically the minimum number of steps he agent took to get through one of the queries.
+So again, if you have an unnecessary step that's taken by all the runs of your agent, typically convergence evals won't catch that situation.
+Second, you want to make sure when running convergence evaluators that you're only running them using four completed runs of your agent.
+If your agent takes three steps to get into a problem and then errors out, you don't want to track those three steps because that will skew your convergence evaluation data.
